@@ -58,7 +58,6 @@ namespace PgpSandbox
             var outStream = new MemoryStream();
             var privateKeyStream = new MemoryStream(Encoding.UTF8.GetBytes(Regex.Unescape(securityKeySource.PrivateKeySource)));
             securityKeySource.PassPhrase = securityKeySource.PassPhrase == "0" ? null : securityKeySource.PassPhrase; // signify it's null/empty in Azure (we can't store null values)
-            //_pgp.DecryptStream(inputStream, outStream, privateKeyStream, securityKeySource.PassPhrase);
             _pgp.DecryptStream(inputStream, outStream, privateKeyStream, "");
             inputStream.Dispose();
             using (var outputStream = File.Open(output, FileMode.Create, FileAccess.Write))
@@ -69,8 +68,6 @@ namespace PgpSandbox
 
         public string Encrypt(string tenant, string input, string output)
         {
-            Log.LogInformation("input: {input}", input);
-            Log.LogInformation("output: {output}", output);
             var securityKeySource = _secretManager.AcquireKeys(tenant);
             _pgp.EncryptFile(input, output, securityKeySource.PublicKeySource);
             return output;
