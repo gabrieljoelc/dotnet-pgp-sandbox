@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace PgpSandbox
 {
@@ -19,7 +20,7 @@ namespace PgpSandbox
             var serviceProvider = services.BuildServiceProvider();
 
             // entry to run app
-            serviceProvider.GetRequiredService<App>().Run();
+            serviceProvider.GetRequiredService<App>().Run(args);
         }
 
         private static void ConfigureServices(IServiceCollection services)
@@ -64,20 +65,30 @@ namespace PgpSandbox
     {
         private FilePathes Pathes { get; }
         private PgpService Service { get; }
+        private ILogger<App> Log { get; }
 
-        public App(IOptions<FilePathes> options, PgpService service)
+        public App(IOptions<FilePathes> options, PgpService service, ILogger<App> log)
         {
             Pathes = options.Value;
             Service = service;
+            Log = log;
         }
 
-        public void Run()
+        public void Run(string[] args)
         {
-            Console.WriteLine($"Pathes.Input: {Pathes.Input}");
-            var input = Service.Encrypt(null, Pathes.Input, Pathes.Output);
-            Console.WriteLine($"encrypted input: {input}");
-            //var output = Service.Decrypt(null, input, Pathes.Output);
-            //Console.WriteLine($"decrypted output: {output}");
+            var firstArg = args.First();
+            if (firstArg == "encrypt")
+            {
+              Log.LogInformation("Trying to encrypt {input} and write encrypted file to {output}...", Pathes.Input, Pathes.Output);
+              var input = Service.Encrypt(null, Pathes.Input, Pathes.Output);
+              Log.LogInformation("Successfully encrypted!");
+            }
+            if (firstArg == "decrypt")
+            {
+              Log.LogInformation("Trying to decrypt {input} and write decrypted file to {output}...", Pathes.Input, Pathes.Output);
+              var input = Service.Encrypt(null, Pathes.Input, Pathes.Output);
+              Log.LogInformation("Successfully decrypted!");
+            }
         }
     }
 }
