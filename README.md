@@ -11,8 +11,8 @@ Prerequesites:
 1. Create `.env` file in root
 2. Add these environment variables to the `.env` file:
 ```
-SecurityKeySource__PrivateKeySource="-----BEGIN PGP PRIVATE KEY BLOCK----- <your private key stuff> -----END PGP PRIVATE KEY BLOCK-----"
-SecurityKeySource__PrivateKeySource="-----BEGIN PGP PUBLIC KEY BLOCK----- <your public key stuff> -----END PGP PUBLIC KEY BLOCK-----"
+SecurityKeySource__PrivateKeySource=<path to private key file relative to root>
+SecurityKeySource__PublicKeySource=<path to public key file relative to root>
 SecurityKeySource__PassPhrase=<your passphrase>
 FilePathes__Input=<file to encrypt/decrypt>
 FilePathes__Input=<path of encrypted/decrypted file to read relative to root of solution>
