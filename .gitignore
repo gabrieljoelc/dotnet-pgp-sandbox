@@ -1,0 +1,5 @@
+*.pgp
+obj/
+bin/
+.env
+processing-files/
